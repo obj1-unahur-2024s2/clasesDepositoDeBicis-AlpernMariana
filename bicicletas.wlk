@@ -12,7 +12,12 @@ class Bicicleta{
     method peso()= rodado/2 + accesorios.sum({a=> a.peso()})
     method esLuminoso() = accesorios.any({a => a.esLuminoso()})
 
-    method cantidadAccesoriosLivianos() = accesorios.count({a =a.peso() < 1})
+    method cantidadAccesoriosLivianos() = accesorios.count({a =>a.peso() < 1})
+    method esBiciCompaniera(otraBici) =
+        otraBici.marca() == self.marca()
+        && (otraBici.largo() - self.largo().abs()) <= 10 
+        && otraBici!= self
+        
 }
 
 class Farolito {
@@ -33,6 +38,28 @@ class MorralDeBici {
   var property tieneOjoDeGato 
   method peso() = 1.2
   method carga() = largo/3
-  method esLuminoso() = 
+  method esLuminoso() = tieneOjoDeGato
 
 }
+
+class Deposito{
+  const bicis =[]
+  method bicisRapidas() = bicis.filter{b=>b.velocidad()>25}
+  method marcaBicis() = bicis.map({b=> b.marca()}).asSet()
+  method esNocturno() = bicis.all({b=>b.esLuminoso()})
+  method tieneBiciParaCargar(kg) = bicis.any({b=>b.carga() > kg})
+  method laMarcaMasRapida() = self.biciMasRapida()
+  method biciMasRapida() = bicis.max({b=>b.velocidad()})
+  method bicisLargas() = bicis.filter({b=>b.largo() >170})
+  method cargaTotalBicisLargas() =
+    if (!self.bicisLargas().isEmpty())
+    {self.bicisLargas().sum({b=>b.carga()})}
+    else{0}
+ method bicisSinAccesorios() = bicis.count({b => b.accesorios().isEmpty()})
+ 
+ method bicisCompanierasDe(unaBici) =
+   bicis.filter({b => b.esBiciCompaniera(unaBici)})
+}
+
+
+
